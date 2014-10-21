@@ -1,0 +1,35 @@
+﻿<Window x:Class="SequenceDiagram.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525"
+        DataContext="{Binding Source={StaticResource vm}}">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Close"/>
+                <MenuItem Header="_Save"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel>
+            <Grid Height="482">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="143*"/>
+                    <RowDefinition Height="98*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <DockPanel  x:Name="rect" LastChildFill="True" Visibility="Collapsed" Grid.RowSpan="2">
+                    <Border  Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
+                        <TextBlock Foreground="Black"><Run Text="Dock = &quot;Top&quot;"/></TextBlock>
+                    </Border>
+                </DockPanel>
+                <Button Command="{Binding ExpandButton}" x:Name="ToolboxExpand" Content="&gt;" HorizontalAlignment="Left" Margin="-1,226,0,0" VerticalAlignment="Top" Width="18" Height="106" Grid.RowSpan="2"/>
+            </Grid>
+        </StackPanel>
+    </DockPanel>
+
+
+</Window>
