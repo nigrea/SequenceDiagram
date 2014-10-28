@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsProgrammingAssignment.Command
+namespace SequenceDiagram.Commands
 {
-    interface ICommand
+    public interface IUndoableCommand
     {
-        void run();
-        void undo();
+        void Run();
+        void Undo();
            
     }
 }

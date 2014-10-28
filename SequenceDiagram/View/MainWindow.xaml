@@ -11,24 +11,17 @@
                 <MenuItem Header="_Save"/>
             </MenuItem>
         </Menu>
-        <StackPanel>
-            <Grid Height="482">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="143*"/>
-                    <RowDefinition Height="98*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <DockPanel  x:Name="rect" LastChildFill="True" Visibility="Collapsed" Grid.RowSpan="2">
-                    <Border  Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
-                        <TextBlock Foreground="Black"><Run Text="Dock = &quot;Top&quot;"/></TextBlock>
-                    </Border>
-                </DockPanel>
-                <Button Command="{Binding ExpandButton}" x:Name="ToolboxExpand" Content="&gt;" HorizontalAlignment="Left" Margin="-1,226,0,0" VerticalAlignment="Top" Width="18" Height="106" Grid.RowSpan="2"/>
-            </Grid>
-        </StackPanel>
+                <Button Command="{Binding Test}" x:Name="Test" Content="&gt;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="106" Grid.RowSpan="2" RenderTransformOrigin="2.32,0.962"/>
+        <DataGrid x:Name="dgComponents" Height="140" ItemsSource="{Binding Components}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGridCell>
+                <DataGrid x:Name ="derpherp" Height="40" ItemsSource="{Binding Messages}" HeadersVisibility="Column">
+                    <DataGridCell>
+                        
+                    </DataGridCell>
+                </DataGrid>
+            </DataGridCell>
+        </DataGrid>
+        
     </DockPanel>
 
 

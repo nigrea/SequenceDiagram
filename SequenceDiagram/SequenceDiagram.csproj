@@ -67,7 +67,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\AddComponent.cs" />
+    <Compile Include="Commands\AddMessage.cs" />
+    <Compile Include="Commands\CommandController.cs" />
+    <Compile Include="Commands\IUndoableCommand.cs" />
+    <Compile Include="Commands\RemoveComponent.cs" />
+    <Compile Include="Commands\RemoveMessage.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -100,6 +105,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Elements\Elements.csproj">
+      <Project>{f262add2-0c07-4763-9070-0f33a5fd978b}</Project>
+      <Name>Elements</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
