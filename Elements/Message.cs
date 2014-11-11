@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace Elements
 {
+    [Serializable]
     public class Message : NotifyBase
     {
 
         private int position;
         public int Position { get { return position; } set { position = value; NotifyPropertyChanged("Position"); } }
 
-        private Component endA;
-        private Component endB;
-        public Component EndA { get { return endA; } set { endA = value; NotifyPropertyChanged("EndA"); } }
-        public Component EndB { get { return endB; } set { endB = value; NotifyPropertyChanged("EndB"); } }
+        private Component start;
+        private Component end;
+        public Component Start { get { return start; } set { start = value; NotifyPropertyChanged("EndA"); } }
+        public Component End { get { return end; } set { end = value; NotifyPropertyChanged("EndB"); } }
+
+        public Message(Component start, Component end){
+            this.start = start;
+            this.end = end;
+        }
 
     }
 }

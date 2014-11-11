@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Elements
 {
+    [Serializable]
     public class Component : NotifyBase
     {
         private static int counter = 0;

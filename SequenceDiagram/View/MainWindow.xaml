@@ -9,15 +9,16 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open"/>
-                <MenuItem Header="_Close"/>
-                <MenuItem Header="_Save"/>
+                <MenuItem Header="_Undo" Command="{Binding UndoCommand}"/>
+                <MenuItem Header="_Redo" Command="{Binding RedoCommand}"/>
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="_Load" Command="{Binding LoadCommand}"/>
             </MenuItem>
         </Menu>
+        
                 <Button Command="{Binding Test}" x:Name="Test" Content="&gt;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="106" Grid.RowSpan="2" RenderTransformOrigin="2.32,0.962"/>
         <DataGrid x:Name="dgComponents" Height="140" ItemsSource="{Binding Components}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
-            
-        </DataGrid>
+                        
         
     </DockPanel>
 

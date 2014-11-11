@@ -31,6 +31,11 @@ namespace SequenceDiagram.Commands
             command.Run();
         }
 
+        public void clearStacks() {
+            undoStack.Clear();
+            redoStack.Clear();
+        }
+
         // Sørger for at undo kun kan kaldes når der er kommandoer i undo stacken.
         public bool CanUndo()
         {
