@@ -1,8 +1,11 @@
 ﻿<Window x:Class="SequenceDiagram.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525"
-        DataContext="{Binding Source={StaticResource vm}}">
+        xmlns:vm="clr-namespace:SequenceDiagram.ViewModel"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -13,13 +16,7 @@
         </Menu>
                 <Button Command="{Binding Test}" x:Name="Test" Content="&gt;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="106" Grid.RowSpan="2" RenderTransformOrigin="2.32,0.962"/>
         <DataGrid x:Name="dgComponents" Height="140" ItemsSource="{Binding Components}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
-            <DataGridCell>
-                <DataGrid x:Name ="derpherp" Height="40" ItemsSource="{Binding Messages}" HeadersVisibility="Column">
-                    <DataGridCell>
-                        
-                    </DataGridCell>
-                </DataGrid>
-            </DataGridCell>
+            
         </DataGrid>
         
     </DockPanel>

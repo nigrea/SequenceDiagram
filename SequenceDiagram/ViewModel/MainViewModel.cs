@@ -21,6 +21,8 @@ namespace SequenceDiagram.ViewModel
         public ObservableCollection<Component> Components { get; set; }
         public ObservableCollection<Message> Messages { get; set; }
 
+        public Component_Grid Grid;
+
         private CommandController commandController = CommandController.GetInstance();
 
         public ICommand Test { get; private set; }
@@ -29,6 +31,8 @@ namespace SequenceDiagram.ViewModel
         
             Components = new ObservableCollection<Component>();
             Test = new RelayCommand(Testy);
+            
+
 
 
         }

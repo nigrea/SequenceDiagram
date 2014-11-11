@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component.cs" />
+    <Compile Include="Component_Grid.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="NotifyBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,10 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ViewModel ="clr-namespace:SequenceDiagram.ViewModel"
+             xmlns:View ="clr-namespace:SequenceDiagram.View"
+             xmlns:Elements ="clr-namespace:Elements;assembly=Elements"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary>
-            <ViewModel:MainViewModel x:Key="vm"/>
-        </ResourceDictionary>
+
+        <DataTemplate DataType="{x:Type Elements:Component}">
+            <Canvas> 
+                <View:ComponentUserControl />
+            </Canvas>
+        </DataTemplate>
+
     </Application.Resources>
 </Application>

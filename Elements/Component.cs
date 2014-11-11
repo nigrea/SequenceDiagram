@@ -39,7 +39,7 @@ namespace Elements
         public Component() {
 
             Position = ++counter;
-
+            Height = 300;
 
         }
 
