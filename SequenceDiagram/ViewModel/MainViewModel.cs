@@ -19,10 +19,8 @@ namespace SequenceDiagram.ViewModel
     {
 
 
-        public Component randomComponent;
+        public ComponentGrid ComponentGrid;
         public ObservableCollection<Component> Components { get; set; }
-        public ObservableCollection<Message> Messages { get; set; }
-
         private CommandController commandController = CommandController.GetInstance();
 
         public ICommand Test { get; private set; }
@@ -31,14 +29,17 @@ namespace SequenceDiagram.ViewModel
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
 
-        public MainViewModel() { 
-        
-            Components = new ObservableCollection<Component>();
+        public MainViewModel() {
+
+            ComponentGrid = new ComponentGrid();
+            Components = ComponentGrid.Components;
             Test = new RelayCommand(Testy);
             SaveCommand = new RelayCommand(Save);
             LoadCommand = new RelayCommand(Load);
             UndoCommand = new RelayCommand(commandController.Undo, commandController.CanUndo);
             RedoCommand = new RelayCommand(commandController.Redo, commandController.CanRedo);
+
+
 
         }
 
@@ -51,7 +52,7 @@ namespace SequenceDiagram.ViewModel
                 using (Stream stream = File.Open(filedialog.FileName, FileMode.Create))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    bformatter.Serialize(stream, Components);
+                    bformatter.Serialize(stream, ComponentGrid);
                 }
             }
             
@@ -61,14 +62,14 @@ namespace SequenceDiagram.ViewModel
             OpenFileDialog filedialog = new OpenFileDialog();
             Nullable<bool> result = filedialog.ShowDialog();
             if (result == true) {
-                Components.Clear();
                 commandController.clearStacks();
                 using (Stream stream = File.Open(filedialog.FileName, FileMode.Open))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                    ObservableCollection<Component> loadedComponents = (ObservableCollection<Component>)bformatter.Deserialize(stream);
-                    foreach (Component component in loadedComponents) Components.Add(component);
+
+                    ComponentGrid = (ComponentGrid)bformatter.Deserialize(stream);
+                    
                 }
             }
            
@@ -76,7 +77,7 @@ namespace SequenceDiagram.ViewModel
 
         public void Testy() {
 
-            commandController.AddAndExecute(new AddComponent(Components));
+            commandController.AddAndExecute(new AddComponent(ComponentGrid));
 
         }
 

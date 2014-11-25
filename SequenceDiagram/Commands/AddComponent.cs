@@ -12,20 +12,20 @@ namespace SequenceDiagram.Commands
     public class AddComponent : IUndoableCommand
     {
 
-        private ObservableCollection<Component> components;
+        public ComponentGrid componentGrid;
         private Component component = new Component();
 
-        public AddComponent(ObservableCollection<Component> components)
+        public AddComponent(ComponentGrid componentGrid)
         {
-            this.components = components;
+            this.componentGrid = componentGrid;
         }
 
         public void Run() {
-            components.Add(component);
+            componentGrid.addComponent(component);
         }
 
         public void Undo() {
-            components.Remove(component);
+            componentGrid.removeComponent(component);
         }
 
     }

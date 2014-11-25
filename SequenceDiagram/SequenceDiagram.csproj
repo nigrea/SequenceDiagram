@@ -65,11 +65,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\ComponentUserControl.xaml">
+    <Page Include="View\ComponentGridUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Componet_Grid.xaml">
+    <Page Include="View\ComponentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -88,11 +88,11 @@
     <Compile Include="Commands\RemoveComponent.cs" />
     <Compile Include="Commands\RemoveMessage.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\ComponentGridUserControl.xaml.cs">
+      <DependentUpon>ComponentGridUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ComponentUserControl.xaml.cs">
       <DependentUpon>ComponentUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Componet_Grid.xaml.cs">
-      <DependentUpon>Componet_Grid.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

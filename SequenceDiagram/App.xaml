@@ -7,6 +7,14 @@
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
 
+         <DataTemplate DataType="{x:Type Elements:ComponentGrid}">
+            <Canvas>
+                <View:ComponentGridUserControl />
+                
+            </Canvas>
+        </DataTemplate> 
+
+
         <DataTemplate DataType="{x:Type Elements:Component}">
             <Canvas> 
                 <View:ComponentUserControl />
