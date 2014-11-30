@@ -15,16 +15,18 @@ namespace Elements
         private int x;
         private int y;
 
-        private int ScreenWidth = 600; //CHANGE THIS, NOT DYNEMIC!! ONLY FOR TESTING!!!
+        private int ScreenWidth = 1920; //CHANGE THIS, NOT DYNEMIC!! ONLY FOR TESTING!!!
 
-        public ComponentGrid() { 
+        public ComponentGrid()
+        {
             Components = new ObservableCollection<Component>();
             Messages = new ObservableCollection<Message>();
-        
+
         }
 
-        public void addComponent(Component component) {
-            component.Position = Components.Count+1; // Probably needs to be changed!!
+        public void addComponent(Component component)
+        {
+            component.Position = Components.Count + 1; // Probably needs to be changed!!
             Components.Add(component);
             refresh();
         }
@@ -34,11 +36,49 @@ namespace Elements
             Components.Remove(component);
         }
 
-        public void refresh() {
-            foreach (Component component in Components) {
+        public void refresh()
+        {
+            foreach (Component component in Components)
+            {
                 component.X = ScreenWidth / (Components.Count + 1) * component.Position;
-                component.Width = (ScreenWidth / (Components.Count + 1)) - 20 ;
+                component.Width = (ScreenWidth / (Components.Count + 1)) - 20;
             }
+        }
+
+        public void setNewPosition(Component movingComponent, double coordinate)
+        {
+            int newPosition = (Components.Count + 1) * (int)coordinate / ScreenWidth;
+            if (newPosition == 0)
+            {
+                newPosition = 1;
+            }
+            if (newPosition > Components.Count)
+            {
+                newPosition = Components.Count;
+            }
+            if (newPosition < movingComponent.Position)
+            {
+                foreach (Component component in Components)
+                {
+                    if (component != movingComponent && component.Position >= newPosition && component.Position < movingComponent.Position)
+                    {
+                        component.Position++;
+                    }
+                }
+            }
+            else if (newPosition > movingComponent.Position)
+            {
+                foreach (Component component in Components)
+                {
+                    if (component != movingComponent && component.Position <= newPosition && component.Position > movingComponent.Position)
+                    {
+                        component.Position--;
+                    }
+                }
+            }
+            movingComponent.Position = newPosition;
+            refresh();
+
         }
 
     }
