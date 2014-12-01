@@ -29,6 +29,19 @@
     X1="{Binding CenterX}" Y1="49"
     X2="{Binding CenterX}" Y2="{Binding Height}"
     Stroke="Black"
-    StrokeThickness="4" Margin="0,-1,0,1" />
+    StrokeThickness="4" Margin="0,-1,0,1">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <mvvm:EventToCommand Command="{Binding DataContext.MouseDownLineCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseMove">
+                    <mvvm:EventToCommand Command="{Binding DataContext.MouseMoveLineCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp">
+                    <mvvm:EventToCommand Command="{Binding DataContext.MouseUpLineCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </Line>
     </Grid>
 </UserControl>

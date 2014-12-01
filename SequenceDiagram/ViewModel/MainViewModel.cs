@@ -20,6 +20,7 @@ namespace SequenceDiagram.ViewModel
     public class MainViewModel
     {
 
+        private Component addLineFrom;
         private Point moveShapePoint;
         public ComponentGrid ComponentGrid;
         public ObservableCollection<Component> Components { get; set; }
@@ -34,6 +35,10 @@ namespace SequenceDiagram.ViewModel
         public ICommand MouseDownComponentCommand { get; private set; }
         public ICommand MouseMoveComponentCommand { get; private set; }
         public ICommand MouseUpComponentCommand { get; private set; }
+        public ICommand MouseDownLineCommand { get; private set; }
+        public ICommand MouseMoveLineCommand { get; private set; }
+        public ICommand MouseUpLineCommand { get; private set; }
+
         public MainViewModel()
         {
 
@@ -48,14 +53,16 @@ namespace SequenceDiagram.ViewModel
             MouseDownComponentCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownComponent);
             MouseMoveComponentCommand = new RelayCommand<MouseEventArgs>(MouseMoveComponent);
             MouseUpComponentCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpComponent);
-
+            MouseDownLineCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownLine);
+            MouseMoveLineCommand = new RelayCommand<MouseEventArgs>(MouseMoveLine);
+            MouseUpLineCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpLine);
 
             //for testing!!!:
 
             commandController.AddAndExecute(new AddComponent(ComponentGrid));
             commandController.AddAndExecute(new AddComponent(ComponentGrid));
 
-            
+
 
 
         }
@@ -100,68 +107,97 @@ namespace SequenceDiagram.ViewModel
         {
 
             commandController.AddAndExecute(new AddComponent(ComponentGrid));
-            commandController.AddAndExecute(new AddMessage(Components.ElementAt<Component>(0), Components.ElementAt<Component>(1), ComponentGrid));
         }
 
         public void MouseDownComponent(MouseButtonEventArgs e)
         {
-            System.Console.WriteLine("MouseDown!!!");
             e.MouseDevice.Target.CaptureMouse();
         }
 
-        // This is only used for moving a Shape, and only if the mouse is already captured.
         public void MouseMoveComponent(MouseEventArgs e)
         {
-            System.Console.WriteLine("MouseMove!!!");
-            // Checks that the mouse is captured and that a line is not being drawn.
             if (Mouse.Captured != null)
             {
-                // It is now known that the mouse is captured and here the visual element that the mouse is captured by is retrieved.
+
                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                // From the shapes visual element, the Shape object which is the DataContext is retrieved.
                 Component componentModel = (Component)shapeVisualElement.DataContext;
-                // The canvas holding the shapes visual element, is found by searching up the tree of visual elements.
                 Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
-                // The mouse position relative to the canvas is gotten here.
                 Point mousePosition = Mouse.GetPosition(canvas);
-                // When the shape is moved with the mouse, this method is called many times, for each part of the movement.
-                // Therefore to only have 1 Undo/Redo command saved for the whole movement, the initial position is saved, 
-                //  during the first part of the movement, so that it together with the final position, 
-                //  from when the mouse is released, can become one Undo/Redo command.
+
                 if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
-                // The Shape is moved to the position of the mouse in relation to the canvas.
-                // The View (GUI) is then notified by the Shape, that its properties have changed.
-                componentModel.CanvasCenterX = (int)mousePosition.X;
-                componentModel.CanvasCenterY = (int)mousePosition.Y;
+
+
+                ComponentGrid.setNewPosition(componentModel, mousePosition.X);
+
+                //componentModel.CanvasCenterX = (int)mousePosition.X;
+                //componentModel.CanvasCenterY = (int)mousePosition.Y;
             }
         }
 
-        // There are two reasons for doing a 'MouseUp'.
-        // Either a Line is being drawn, and the second Shape has just been chosen.
-        // Or a Shape is being moved and the move is now done.
         public void MouseUpComponent(MouseButtonEventArgs e)
         {
-            System.Console.WriteLine("MouseUp!!!");
-            // Here the visual element that the mouse is captured by is retrieved.
             FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-            // From the shapes visual element, the Shape object which is the DataContext is retrieved.
             Component component = (Component)shapeVisualElement.DataContext;
-            // The canvas holding the shapes visual element, is found by searching up the tree of visual elements.
             Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
-            // The mouse position relative to the canvas is gotten here.
             Point mousePosition = Mouse.GetPosition(canvas);
 
             ComponentGrid.setNewPosition(component, mousePosition.X);
 
-            // Now that the Move Shape operation is over, the Shape is moved to the final position (coordinates), 
-            //  by using a MoveNodeCommand to move it.
-            // The MoveNodeCommand is given the original coordinates and with respect to the Undo/Redo functionality, 
-            //  the Shape has only been moved once, with this Command.
             //undoRedoController.AddAndExecute(new MoveShapeCommand(component, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));
             component.Y = 0;
-            // The original Shape point before the move is cleared, so the MainViewModel is ready for the next move operation.
+
             moveShapePoint = new Point();
-            // The mouse is released, as the move operation is done, so it can be used by other controls.
+
+            e.MouseDevice.Target.ReleaseMouseCapture();
+
+        }
+
+
+        public void MouseDownLine(MouseButtonEventArgs e)
+        {
+            e.MouseDevice.Target.CaptureMouse();
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            addLineFrom = (Component)shapeVisualElement.DataContext;
+        }
+
+        public void MouseMoveLine(MouseEventArgs e)
+        {
+            /* if (Mouse.Captured != null)
+             {
+
+                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+                 Component componentModel = (Component)shapeVisualElement.DataContext;
+                 Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+                 Point mousePosition = Mouse.GetPosition(canvas);
+
+                 if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
+
+
+                 ComponentGrid.setNewPosition(componentModel, mousePosition.X);
+
+                 //componentModel.CanvasCenterX = (int)mousePosition.X;
+                 //componentModel.CanvasCenterY = (int)mousePosition.Y;
+             }*/
+        }
+
+        public void MouseUpLine(MouseButtonEventArgs e)
+        {
+
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            Component startComponent = (Component)shapeVisualElement.DataContext;
+            Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            Point mousePosition = Mouse.GetPosition(canvas);
+            Component endComponent = ComponentGrid.getComponentFromCoordinate(mousePosition.X);
+
+
+            if (endComponent != null)
+            {
+                commandController.AddAndExecute(new AddMessage(startComponent, endComponent, ComponentGrid));
+            }
+            addLineFrom = null;
+
+            moveShapePoint = new Point();
+
             e.MouseDevice.Target.ReleaseMouseCapture();
 
         }

@@ -50,6 +50,19 @@ namespace Elements
             Messages.Remove(message);
         }
 
+        public Component getComponentFromCoordinate(double coordinate) {
+
+            int position = (int)coordinate * (Components.Count + 1) / ScreenWidth;
+
+            foreach (Component component in Components) {
+                if (position == component.Position) {
+                    return component;
+                }
+            }
+            
+            return null;
+        }
+
         public void refresh()
         {
             foreach (Component component in Components)
