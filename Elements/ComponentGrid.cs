@@ -15,7 +15,7 @@ namespace Elements
         private int x;
         private int y;
 
-        private int ScreenWidth = 1920; //CHANGE THIS, NOT DYNEMIC!! ONLY FOR TESTING!!!
+        private int ScreenWidth = 600; //CHANGE THIS, NOT DYNEMIC!! ONLY FOR TESTING!!!
 
         public ComponentGrid()
         {
