@@ -14,6 +14,8 @@ namespace Elements
         public ObservableCollection<Message> Messages { get; set; }
         private int x;
         private int y;
+        
+
 
         private int ScreenWidth = 600; //CHANGE THIS, NOT DYNEMIC!! ONLY FOR TESTING!!!
 
@@ -36,12 +38,29 @@ namespace Elements
             Components.Remove(component);
         }
 
+        public void addMessage(Message message)
+        {
+            message.Position = Messages.Count + 1;
+            Messages.Add(message);
+            refresh();
+        }
+
+        public void removeMessage(Message message)
+        {
+            Messages.Remove(message);
+        }
+
         public void refresh()
         {
             foreach (Component component in Components)
             {
                 component.X = ScreenWidth / (Components.Count + 1) * component.Position;
                 component.Width = (ScreenWidth / (Components.Count + 1)) - 20;
+                component.Height = 100 + (Messages.Count * 100);
+            }
+            foreach (Message message in Messages) 
+            {
+                message.Y = 100 * message.Position;
             }
         }
 

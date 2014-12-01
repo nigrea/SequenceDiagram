@@ -23,6 +23,7 @@ namespace SequenceDiagram.ViewModel
         private Point moveShapePoint;
         public ComponentGrid ComponentGrid;
         public ObservableCollection<Component> Components { get; set; }
+        public ObservableCollection<Message> Messages { get; set; }
         private CommandController commandController = CommandController.GetInstance();
 
         public ICommand Test { get; private set; }
@@ -38,6 +39,7 @@ namespace SequenceDiagram.ViewModel
 
             ComponentGrid = new ComponentGrid();
             Components = ComponentGrid.Components;
+            Messages = ComponentGrid.Messages;
             Test = new RelayCommand(Testy);
             SaveCommand = new RelayCommand(Save);
             LoadCommand = new RelayCommand(Load);
@@ -47,6 +49,13 @@ namespace SequenceDiagram.ViewModel
             MouseMoveComponentCommand = new RelayCommand<MouseEventArgs>(MouseMoveComponent);
             MouseUpComponentCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpComponent);
 
+
+            //for testing!!!:
+
+            commandController.AddAndExecute(new AddComponent(ComponentGrid));
+            commandController.AddAndExecute(new AddComponent(ComponentGrid));
+
+            
 
 
         }
@@ -91,7 +100,7 @@ namespace SequenceDiagram.ViewModel
         {
 
             commandController.AddAndExecute(new AddComponent(ComponentGrid));
-
+            commandController.AddAndExecute(new AddMessage(Components.ElementAt<Component>(0), Components.ElementAt<Component>(1), ComponentGrid));
         }
 
         public void MouseDownComponent(MouseButtonEventArgs e)

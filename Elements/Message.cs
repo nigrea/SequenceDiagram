@@ -13,6 +13,9 @@ namespace Elements
         private int position;
         public int Position { get { return position; } set { position = value; NotifyPropertyChanged("Position"); } }
 
+        private int y;
+        public int Y { get { return y; } set { y = value; NotifyPropertyChanged("Y"); } }
+
         private Component start;
         private Component end;
         public Component Start { get { return start; } set { start = value; NotifyPropertyChanged("EndA"); } }

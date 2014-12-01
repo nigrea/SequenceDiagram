@@ -40,6 +40,7 @@ namespace Elements
 
         public Component() {
 
+            messages = new ObservableCollection<Message>();
             Position = ++counter;
             Height = 300;
 
