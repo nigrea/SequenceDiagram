@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace SequenceDiagram.View
 {
     /// <summary>
-    /// Interaction logic for Componet_Grid.xaml
+    /// Interaction logic for MessageUserControl.xaml
     /// </summary>
-    public partial class Componet_Grid : Window
+    public partial class MessageUserControl : UserControl
     {
-        public Componet_Grid()
+        public MessageUserControl()
         {
             InitializeComponent();
         }

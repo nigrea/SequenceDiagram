@@ -11,26 +11,27 @@ namespace SequenceDiagram.Commands
     class AddMessage : IUndoableCommand
     {
 
-        private ObservableCollection<Message> messages;
+        private ComponentGrid componentGrid;
         private Message message;
         private Component start;
 
-        public AddMessage(Component start, Component end, ObservableCollection<Message> messages)
+        public AddMessage(Component start, Component end, ComponentGrid componentGrid)
         {
             message = new Message(start, end);
-            this.messages = messages;
+            this.componentGrid = componentGrid;
             this.start = start;
         }
 
         public void Run()
         {
-            messages.Add(message);
+            
+            componentGrid.addMessage(message);
             start.Messages.Add(message);
         }
 
         public void Undo()
         {
-            messages.Remove(message);
+            componentGrid.removeMessage(message);
             start.Messages.Remove(message);
         }
     }

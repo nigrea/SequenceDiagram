@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
+
 namespace Elements
 {
     [Serializable]
@@ -39,6 +40,7 @@ namespace Elements
 
         public Component() {
 
+            messages = new ObservableCollection<Message>();
             Position = ++counter;
             Height = 300;
 
