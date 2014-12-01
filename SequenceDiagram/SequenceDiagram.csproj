@@ -65,6 +65,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\Arrow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\CMD_box.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ComponentUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -88,6 +96,12 @@
     <Compile Include="Commands\RemoveComponent.cs" />
     <Compile Include="Commands\RemoveMessage.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\Arrow.xaml.cs">
+      <DependentUpon>Arrow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CMD_box.xaml.cs">
+      <DependentUpon>CMD_box.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ComponentUserControl.xaml.cs">
       <DependentUpon>ComponentUserControl.xaml</DependentUpon>
     </Compile>
