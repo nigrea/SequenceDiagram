@@ -24,7 +24,7 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Rectangle>
-        <TextBox HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="Auto"/>
+        <TextBox HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="{Binding Width}"/>
         <Line
     X1="{Binding CenterX}" Y1="49"
     X2="{Binding CenterX}" Y2="{Binding Height}"

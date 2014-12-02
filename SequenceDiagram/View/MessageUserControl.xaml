@@ -6,11 +6,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        
+        <TextBox   HorizontalAlignment="Left" Height="25" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="Auto"/>
         <Line
     X1="{Binding Start.CanvasCenterX}" Y1="{Binding Y}"
     X2="{Binding End.CanvasCenterX}" Y2="{Binding Y}"
     Stroke="Black"
     StrokeThickness="4" Margin="0,-1,0,1" />
+
+        <Line
+            X1="{Binding XLeft}" Y1="{Binding YTop}"
+            X2="{Binding End.CanvasCenterX}" Y2="{Binding Y}"
+            Stroke="Black"
+            StrokeThickness="4" Margin="0,-1,0,1"/>
+
+        <Line
+            X1="{Binding XLeft}" Y1="{Binding YBot}"
+            X2="{Binding End.CanvasCenterX}" Y2="{Binding Y}"
+            Stroke="Black"
+            StrokeThickness="4" Margin="0,-1,0,1"/>
 
     </Grid>
 </UserControl>
