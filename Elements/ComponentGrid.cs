@@ -74,6 +74,7 @@ namespace Elements
             foreach (Message message in Messages) 
             {
                 message.Y = 100 * message.Position;
+                message.refresh();
             }
         }
 
