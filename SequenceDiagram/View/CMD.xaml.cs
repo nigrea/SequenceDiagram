@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace SequenceDiagram.View
 {
     /// <summary>
-    /// Interaction logic for Page1.xaml
+    /// Interaction logic for CMD.xaml
     /// </summary>
-    public partial class Page1 : Page
+    public partial class CMD : UserControl
     {
-        public Page1()
+        public CMD()
         {
             InitializeComponent();
         }

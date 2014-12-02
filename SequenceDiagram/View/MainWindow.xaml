@@ -3,25 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:View ="clr-namespace:SequenceDiagram.View"
         xmlns:vm="clr-namespace:SequenceDiagram.ViewModel"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="600" Width="900">
+    
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Undo" Command="{Binding UndoCommand}"/>
-                <MenuItem Header="_Redo" Command="{Binding RedoCommand}"/>
-                <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
-                <MenuItem Header="_Load" Command="{Binding LoadCommand}"/>
-            </MenuItem>
-        </Menu>
-        
-                <Button Command="{Binding Test}" x:Name="Test" Content="&gt;" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="106" Grid.RowSpan="2" RenderTransformOrigin="2.32,0.962"/>
+    <StackPanel Orientation="Horizontal">
+        <View:CMD/>
+        <DockPanel Width="32">
 
-        <View:ComponentGridUserControl/>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Undo" Command="{Binding UndoCommand}"/>
+                    <MenuItem Header="_Redo" Command="{Binding RedoCommand}"/>
+                    <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
+                    <MenuItem Header="_Load" Command="{Binding LoadCommand}"/>
+                </MenuItem>
+            </Menu>
 
-    </DockPanel>
+            
+
+            <View:ComponentGridUserControl/>
+
+        </DockPanel>
+    </StackPanel>
 
 
 </Window>
