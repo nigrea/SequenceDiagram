@@ -77,8 +77,8 @@
     <Compile Include="View\Arrow.xaml.cs">
       <DependentUpon>Arrow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\CMD_box.xaml.cs">
-      <DependentUpon>CMD_box.xaml</DependentUpon>
+    <Compile Include="View\CMD.xaml.cs">
+      <DependentUpon>CMD.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MessageUserControl.xaml.cs">
       <DependentUpon>MessageUserControl.xaml</DependentUpon>
@@ -87,9 +87,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\CMD_box.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="View\CMD.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ComponentGridUserControl.xaml">
       <SubType>Designer</SubType>
