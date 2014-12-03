@@ -56,9 +56,12 @@
   <ItemGroup>
     <Compile Include="Component.cs" />
     <Compile Include="ComponentGrid.cs" />
+    <Compile Include="DataStructure.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="NotifyBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializableComponent.cs" />
+    <Compile Include="SerializableMessage.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>

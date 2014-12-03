@@ -43,6 +43,7 @@ namespace Elements
         }
 
         public void refresh() {
+            NotifyPropertyChanged("Y");
             NotifyPropertyChanged("CanvasLeft");
             NotifyPropertyChanged("CanvasRight");
             NotifyPropertyChanged("Width");

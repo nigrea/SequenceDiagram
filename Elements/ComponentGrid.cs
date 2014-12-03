@@ -36,18 +36,28 @@ namespace Elements
         public void removeComponent(Component component)
         {
             Components.Remove(component);
+            refresh();
         }
 
-        public void addMessage(Message message)
+        public void addMessage(Message newMessage, int position)
         {
-            message.Position = Messages.Count + 1;
-            Messages.Add(message);
+            Messages.Add(newMessage);
+            newMessage.Position = position;
+            foreach (Message message in Messages)
+            {
+                if (message != newMessage && message.Position >= position)
+                {
+                    message.Position++;
+                }
+            }
+
             refresh();
         }
 
         public void removeMessage(Message message)
         {
             Messages.Remove(message);
+            refresh();
         }
 
         public Component getComponentFromCoordinate(double coordinate) {
@@ -61,6 +71,26 @@ namespace Elements
             }
             
             return null;
+        }
+
+        public Message getComponentFromMessage(double coordinate)
+        {
+
+            int position = getPositionOfMessage(coordinate);
+
+            foreach (Message message in Messages)
+            {
+                if (position == message.Position)
+                {
+                    return message;
+                }
+            }
+
+            return null;
+        }
+
+        public int getPositionOfMessage(double coordinate) {
+            return ((int)coordinate / 100);
         }
 
         public void refresh()
@@ -110,6 +140,43 @@ namespace Elements
                 }
             }
             movingComponent.Position = newPosition;
+            refresh();
+
+        }
+
+        public void setNewMessagePosition(Message movingMessage, double coordinate)
+        {
+            int newPosition = getPositionOfMessage(coordinate);
+            System.Console.WriteLine("newPosition "+newPosition);
+            if (newPosition == 0)
+            {
+                newPosition = 1;
+            }
+            if (newPosition > Components.Count)
+            {
+                newPosition = Components.Count;
+            }
+            if (newPosition < movingMessage.Position)
+            {
+                foreach (Message message in Messages)
+                {
+                    if (message != movingMessage && message.Position >= newPosition && message.Position < movingMessage.Position)
+                    {
+                        message.Position++;
+                    }
+                }
+            }
+            else if (newPosition > movingMessage.Position)
+            {
+                foreach (Message message in Messages)
+                {
+                    if (message != movingMessage && message.Position <= newPosition && message.Position > movingMessage.Position)
+                    {
+                        message.Position--;
+                    }
+                }
+            }
+            movingMessage.Position = newPosition;
             refresh();
 
         }

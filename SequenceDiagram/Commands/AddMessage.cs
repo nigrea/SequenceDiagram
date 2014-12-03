@@ -14,18 +14,20 @@ namespace SequenceDiagram.Commands
         private ComponentGrid componentGrid;
         private Message message;
         private Component start;
+        private int position;
 
-        public AddMessage(Component start, Component end, ComponentGrid componentGrid)
+        public AddMessage(Component start, Component end, ComponentGrid componentGrid, int position)
         {
             message = new Message(start, end);
             this.componentGrid = componentGrid;
             this.start = start;
+            this.position = position;
         }
 
         public void Run()
         {
             
-            componentGrid.addMessage(message);
+            componentGrid.addMessage(message,position);
             start.Messages.Add(message);
         }
 

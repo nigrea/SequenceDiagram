@@ -23,6 +23,8 @@ namespace SequenceDiagram.ViewModel
         private Component addLineFrom;
         private Point moveShapePoint;
         public ComponentGrid ComponentGrid;
+        private Point messageStartPoint;
+
         public ObservableCollection<Component> Components { get; set; }
         public ObservableCollection<Message> Messages { get; set; }
         private CommandController commandController = CommandController.GetInstance();
@@ -38,6 +40,10 @@ namespace SequenceDiagram.ViewModel
         public ICommand MouseDownLineCommand { get; private set; }
         public ICommand MouseMoveLineCommand { get; private set; }
         public ICommand MouseUpLineCommand { get; private set; }
+
+        public ICommand MouseDownMessageCommand { get; private set; }
+        public ICommand MouseMoveMessageCommand { get; private set; }
+        public ICommand MouseUpMessageCommand { get; private set; }
 
         public MainViewModel()
         {
@@ -56,6 +62,10 @@ namespace SequenceDiagram.ViewModel
             MouseDownLineCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownLine);
             MouseMoveLineCommand = new RelayCommand<MouseEventArgs>(MouseMoveLine);
             MouseUpLineCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpLine);
+            MouseDownMessageCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownMessage);
+            MouseMoveMessageCommand = new RelayCommand<MouseEventArgs>(MouseMoveMessage);
+            MouseUpMessageCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpMessage);
+
 
             //for testing!!!:
 
@@ -67,18 +77,26 @@ namespace SequenceDiagram.ViewModel
 
         }
 
+        public void newFile() {
+
+            ComponentGrid.Components.Clear();
+            ComponentGrid.Messages.Clear();
+
+        }
+
         public void Save()
         {
             SaveFileDialog filedialog = new SaveFileDialog();
             filedialog.FileName = "untitled";
             filedialog.DefaultExt = ".sqd";
             Nullable<bool> result = filedialog.ShowDialog();
+            DataStructure dataStructure = new DataStructure(Components, Messages);
             if (result == true)
             {
                 using (Stream stream = File.Open(filedialog.FileName, FileMode.Create))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    bformatter.Serialize(stream, ComponentGrid);
+                    bformatter.Serialize(stream, dataStructure);
                 }
             }
 
@@ -96,7 +114,25 @@ namespace SequenceDiagram.ViewModel
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
 
-                    ComponentGrid = (ComponentGrid)bformatter.Deserialize(stream);
+                    DataStructure dataStructure = (DataStructure)bformatter.Deserialize(stream);
+
+
+                    newFile();
+
+                    ObservableCollection<Component> savedComponents = dataStructure.deserialiceComponents();
+                    foreach (Component component in savedComponents)
+                    {
+                        
+                        ComponentGrid.addComponent(component);
+                    }
+                    ObservableCollection<Message> savedMessanges = dataStructure.deserialiceMessages(ComponentGrid.Components);
+                    foreach (Message message in savedMessanges)
+                    {
+                        ComponentGrid.addMessage(message, message.Position);
+                        System.Console.WriteLine("Message added to thingy!!");
+                    }
+
+                    ComponentGrid.refresh();
 
                 }
             }
@@ -153,11 +189,59 @@ namespace SequenceDiagram.ViewModel
         }
 
 
+        public void MouseDownMessage(MouseButtonEventArgs e)
+        {
+            e.MouseDevice.Target.CaptureMouse();
+        }
+
+        public void MouseMoveMessage(MouseEventArgs e)
+        {
+            if (Mouse.Captured != null)
+            {
+
+                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+                Message componentModel = (Message)shapeVisualElement.DataContext;
+                Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+                Point mousePosition = Mouse.GetPosition(canvas);
+
+                if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
+
+
+                ComponentGrid.setNewMessagePosition(componentModel, mousePosition.Y);
+
+                //componentModel.CanvasCenterX = (int)mousePosition.X;
+                //componentModel.CanvasCenterY = (int)mousePosition.Y;
+            }
+        }
+
+        public void MouseUpMessage(MouseButtonEventArgs e)
+        {
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            Message component = (Message)shapeVisualElement.DataContext;
+            Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            Point mousePosition = Mouse.GetPosition(canvas);
+
+            //ComponentGrid.setNewMessagePosition(component, mousePosition.X);
+
+            //undoRedoController.AddAndExecute(new MoveShapeCommand(component, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));
+
+            moveShapePoint = new Point();
+
+            e.MouseDevice.Target.ReleaseMouseCapture();
+
+        }
+
+
+
+
+
         public void MouseDownLine(MouseButtonEventArgs e)
         {
             e.MouseDevice.Target.CaptureMouse();
             FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
             addLineFrom = (Component)shapeVisualElement.DataContext;
+            Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            messageStartPoint = Mouse.GetPosition(canvas);
         }
 
         public void MouseMoveLine(MouseEventArgs e)
@@ -188,11 +272,13 @@ namespace SequenceDiagram.ViewModel
             Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
             Point mousePosition = Mouse.GetPosition(canvas);
             Component endComponent = ComponentGrid.getComponentFromCoordinate(mousePosition.X);
+            if(startComponent != endComponent){
+                int position = ComponentGrid.getPositionOfMessage(messageStartPoint.Y)+1;
 
-
-            if (endComponent != null)
-            {
-                commandController.AddAndExecute(new AddMessage(startComponent, endComponent, ComponentGrid));
+                if (endComponent != null)
+                {
+                    commandController.AddAndExecute(new AddMessage(startComponent, endComponent, ComponentGrid, position));
+                }
             }
             addLineFrom = null;
 
