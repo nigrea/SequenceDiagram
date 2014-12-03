@@ -8,35 +8,26 @@ using System.Threading.Tasks;
 
 namespace SequenceDiagram.Commands
 {
-    class RemoveComponent
+    class RemoveComponent : IUndoableCommand
     {
 
-        private ObservableCollection<Component> components;
-        private ObservableCollection<Component> toRemove;
-        private ObservableCollection<Message> messages;
+        private ComponentGrid componentGrid;
+        private Component toRemove;
 
-        public RemoveComponent(ObservableCollection<Component> components, ObservableCollection<Message> messages, ObservableCollection<Component> toRemove)
+        public RemoveComponent(Component toRemove, ComponentGrid componentGrid)
         {
-            this.components = components;
-            this.messages = messages;
+            this.componentGrid = componentGrid;                
             this.toRemove = toRemove;        
         }
 
         public void Run()
         {
-            foreach (Component component in toRemove){
-                components.Remove(component);
-                foreach (Message message in component.Messages) messages.Remove(message);
-            }
-            
+            componentGrid.removeComponent(toRemove);                        
         }
 
         public void Undo()
         {
-            foreach (Component component in toRemove){
-                components.Add(component);
-                foreach (Message message in component.Messages) messages.Add(message);
-            }
+            componentGrid.addComponent(toRemove);            
         }
     }
 }

@@ -24,16 +24,26 @@ namespace SequenceDiagram.ViewModel
         private Point moveShapePoint;
         public ComponentGrid ComponentGrid;
         private Point messageStartPoint;
+        public bool changeBoxSize, enabledDelete;
 
         public ObservableCollection<Component> Components { get; set; }
         public ObservableCollection<Message> Messages { get; set; }
+
+        public ObservableCollection<Box> Boxes { get; set; }
+
         private CommandController commandController = CommandController.GetInstance();
 
         public ICommand Test { get; private set; }
+
+        public ICommand AddBoxCommand { get; private set; }
+
         public ICommand SaveCommand { get; private set; }
         public ICommand LoadCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
+        public ICommand ChangeBoxModeCommand { get; private set; }
+        public ICommand EnableDeleteCommand { get; private set; }
+
         public ICommand MouseDownComponentCommand { get; private set; }
         public ICommand MouseMoveComponentCommand { get; private set; }
         public ICommand MouseUpComponentCommand { get; private set; }
@@ -41,21 +51,30 @@ namespace SequenceDiagram.ViewModel
         public ICommand MouseMoveLineCommand { get; private set; }
         public ICommand MouseUpLineCommand { get; private set; }
 
+        public ICommand MouseDownBoxCommand { get; private set; }
+        public ICommand MouseMoveBoxCommand { get; private set; }
+        public ICommand MouseUpBoxCommand { get; private set; }
+
         public ICommand MouseDownMessageCommand { get; private set; }
         public ICommand MouseMoveMessageCommand { get; private set; }
         public ICommand MouseUpMessageCommand { get; private set; }
 
         public MainViewModel()
         {
-
+            changeBoxSize = false;
+            enabledDelete = false;
             ComponentGrid = new ComponentGrid();
             Components = ComponentGrid.Components;
             Messages = ComponentGrid.Messages;
+            Boxes = ComponentGrid.Boxes;
             Test = new RelayCommand(Testy);
+            AddBoxCommand = new RelayCommand(addBox);
+            ChangeBoxModeCommand = new RelayCommand(changeBoxMode);
+            EnableDeleteCommand = new RelayCommand(enableDelete);
             SaveCommand = new RelayCommand(Save);
             LoadCommand = new RelayCommand(Load);
-            UndoCommand = new RelayCommand(commandController.Undo, commandController.CanUndo);
-            RedoCommand = new RelayCommand(commandController.Redo, commandController.CanRedo);
+            UndoCommand = new RelayCommand(commandController.Undo);
+            RedoCommand = new RelayCommand(commandController.Redo);
             MouseDownComponentCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownComponent);
             MouseMoveComponentCommand = new RelayCommand<MouseEventArgs>(MouseMoveComponent);
             MouseUpComponentCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpComponent);
@@ -65,7 +84,9 @@ namespace SequenceDiagram.ViewModel
             MouseDownMessageCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownMessage);
             MouseMoveMessageCommand = new RelayCommand<MouseEventArgs>(MouseMoveMessage);
             MouseUpMessageCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpMessage);
-
+            MouseDownBoxCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownBox);
+            MouseMoveBoxCommand = new RelayCommand<MouseEventArgs>(MouseMoveBox);
+            MouseUpBoxCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpBox);
 
             //for testing!!!:
 
@@ -77,20 +98,44 @@ namespace SequenceDiagram.ViewModel
 
         }
 
-        public void newFile() {
+        public void enableDelete()
+        {
+            enabledDelete = !enabledDelete;
+        }
+
+        public void changeBoxMode()
+        {
+            changeBoxSize = !changeBoxSize;
+        }
+
+        public void addBox()
+        {
+            commandController.AddAndExecute(new AddBox(ComponentGrid));
+            System.Console.WriteLine("AddBox in Mvm");
+        }
+
+        public void newFile()
+        {
 
             ComponentGrid.Components.Clear();
             ComponentGrid.Messages.Clear();
+            commandController.clearStacks();
 
         }
 
         public void Save()
         {
+            DataStructure dataStructure = new DataStructure(Components, Messages);
+            Task task = new Task(() => SaveAsynch(dataStructure));
+            task.Start();
+        }
+
+        static async void SaveAsynch(DataStructure dataStructure)
+        {
             SaveFileDialog filedialog = new SaveFileDialog();
             filedialog.FileName = "untitled";
             filedialog.DefaultExt = ".sqd";
             Nullable<bool> result = filedialog.ShowDialog();
-            DataStructure dataStructure = new DataStructure(Components, Messages);
             if (result == true)
             {
                 using (Stream stream = File.Open(filedialog.FileName, FileMode.Create))
@@ -99,7 +144,6 @@ namespace SequenceDiagram.ViewModel
                     bformatter.Serialize(stream, dataStructure);
                 }
             }
-
         }
 
         public void Load()
@@ -122,7 +166,7 @@ namespace SequenceDiagram.ViewModel
                     ObservableCollection<Component> savedComponents = dataStructure.deserialiceComponents();
                     foreach (Component component in savedComponents)
                     {
-                        
+
                         ComponentGrid.addComponent(component);
                     }
                     ObservableCollection<Message> savedMessanges = dataStructure.deserialiceMessages(ComponentGrid.Components);
@@ -147,7 +191,17 @@ namespace SequenceDiagram.ViewModel
 
         public void MouseDownComponent(MouseButtonEventArgs e)
         {
-            e.MouseDevice.Target.CaptureMouse();
+            if (enabledDelete)
+            {
+                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+                Component componentModel = (Component)shapeVisualElement.DataContext;
+                commandController.AddAndExecute(new RemoveComponent(componentModel, ComponentGrid));
+
+            }
+            else
+            {
+                e.MouseDevice.Target.CaptureMouse();
+            }
         }
 
         public void MouseMoveComponent(MouseEventArgs e)
@@ -191,7 +245,17 @@ namespace SequenceDiagram.ViewModel
 
         public void MouseDownMessage(MouseButtonEventArgs e)
         {
-            e.MouseDevice.Target.CaptureMouse();
+            if (enabledDelete)
+            {
+                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+                Message message = (Message)shapeVisualElement.DataContext;
+                commandController.AddAndExecute(new RemoveMessage(message, ComponentGrid));
+
+            }
+            else
+            {
+                e.MouseDevice.Target.CaptureMouse();
+            }
         }
 
         public void MouseMoveMessage(MouseEventArgs e)
@@ -232,7 +296,74 @@ namespace SequenceDiagram.ViewModel
         }
 
 
+        public void MouseDownBox(MouseButtonEventArgs e)
+        {
+            if (enabledDelete)
+            {
+                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+                Box box = (Box)shapeVisualElement.DataContext;
+                commandController.AddAndExecute(new RemoveBox(box, ComponentGrid));
 
+            }
+            else
+            {
+                e.MouseDevice.Target.CaptureMouse();
+            }
+        }
+
+        public void MouseMoveBox(MouseEventArgs e)
+        {
+            if (Mouse.Captured != null)
+            {
+                if (!changeBoxSize)
+                {
+                    FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+
+                    Box box = (Box)shapeVisualElement.DataContext;
+
+                    Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+
+                    Point mousePosition = Mouse.GetPosition(canvas);
+
+                    if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
+
+                    box.CanvasLeft = (int)mousePosition.X;
+                    box.CanvasTop = (int)mousePosition.Y;
+                }
+                else
+                {
+                    FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+
+                    Box box = (Box)shapeVisualElement.DataContext;
+
+                    Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+
+                    Point mousePosition = Mouse.GetPosition(canvas);
+
+                    if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
+
+
+                    int newWidth = (int)mousePosition.X - box.CanvasLeft;
+                    int newHeight = (int)mousePosition.Y - box.CanvasTop;
+
+                    if (newWidth > 50)
+                    {
+                        box.Width = newWidth;
+                    }
+                    if (newHeight > 50)
+                    {
+                        box.Height = newHeight;
+                    }
+
+                }
+            }
+        }
+
+        public void MouseUpBox(MouseButtonEventArgs e)
+        {
+            e.MouseDevice.Target.ReleaseMouseCapture();
+
+        }
 
 
         public void MouseDownLine(MouseButtonEventArgs e)
@@ -272,8 +403,9 @@ namespace SequenceDiagram.ViewModel
             Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
             Point mousePosition = Mouse.GetPosition(canvas);
             Component endComponent = ComponentGrid.getComponentFromCoordinate(mousePosition.X);
-            if(startComponent != endComponent){
-                int position = ComponentGrid.getPositionOfMessage(messageStartPoint.Y)+1;
+            if (startComponent != endComponent)
+            {
+                int position = ComponentGrid.getPositionOfMessage(messageStartPoint.Y) + 1;
 
                 if (endComponent != null)
                 {

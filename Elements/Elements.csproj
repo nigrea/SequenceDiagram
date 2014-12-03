@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Box.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="ComponentGrid.cs" />
     <Compile Include="DataStructure.cs" />

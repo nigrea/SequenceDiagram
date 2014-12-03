@@ -74,8 +74,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AddBox.cs" />
+    <Compile Include="Commands\RemoveBox.cs" />
     <Compile Include="View\Arrow.xaml.cs">
       <DependentUpon>Arrow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BoxUserControl.xaml.cs">
+      <DependentUpon>BoxUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\CMD.xaml.cs">
       <DependentUpon>CMD.xaml</DependentUpon>
@@ -86,6 +91,10 @@
     <Page Include="View\Arrow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\BoxUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CMD.xaml">
       <SubType>Designer</SubType>

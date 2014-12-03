@@ -1,20 +1,18 @@
 ﻿using System;
-using Elements;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+using Elements;
 
 namespace SequenceDiagram.Commands
 {
-    class RemoveMessage : IUndoableCommand
+    public class RemoveBox : IUndoableCommand
     {
-
-        private Message toRemove;
+        private Box toRemove;
         private ComponentGrid componentGrid;
 
-        public RemoveMessage(Message toRemove, ComponentGrid componentGrid)
+        public RemoveBox(Box toRemove, ComponentGrid componentGrid)
         {
             this.toRemove = toRemove;
             this.componentGrid = componentGrid;
@@ -23,14 +21,14 @@ namespace SequenceDiagram.Commands
         public void Run()
         {
 
-            componentGrid.removeMessage(toRemove);
+            componentGrid.removeBox(toRemove);
 
         }
 
         public void Undo()
         {
 
-            componentGrid.addMessage(toRemove, toRemove.Position);
+            componentGrid.addBox(toRemove);
 
         }
 

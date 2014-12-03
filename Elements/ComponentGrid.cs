@@ -12,6 +12,7 @@ namespace Elements
     {
         public ObservableCollection<Component> Components { get; set; }
         public ObservableCollection<Message> Messages { get; set; }
+        public ObservableCollection<Box> Boxes { get; set; }
         private int x;
         private int y;
         
@@ -23,7 +24,18 @@ namespace Elements
         {
             Components = new ObservableCollection<Component>();
             Messages = new ObservableCollection<Message>();
+            Boxes = new ObservableCollection<Box>();
 
+        }
+
+        public void addBox(Box box) {
+            Boxes.Add(box);
+            System.Console.WriteLine("Box added to list " + Boxes.Count);
+        }
+
+        public void removeBox(Box box)
+        {
+            Boxes.Remove(box);
         }
 
         public void addComponent(Component component)
@@ -33,9 +45,16 @@ namespace Elements
             refresh();
         }
 
-        public void removeComponent(Component component)
+        public void removeComponent(Component toRemove)
         {
-            Components.Remove(component);
+            Components.Remove(toRemove);
+            foreach (Component component in Components)
+            {
+                if (component.Position > toRemove.Position)
+                {
+                    component.Position--;
+                }
+            }
             refresh();
         }
 
@@ -54,9 +73,16 @@ namespace Elements
             refresh();
         }
 
-        public void removeMessage(Message message)
+        public void removeMessage(Message toRemove)
         {
-            Messages.Remove(message);
+            Messages.Remove(toRemove);
+            foreach (Message message in Messages)
+            {
+                if (message.Position > toRemove.Position)
+                {
+                    message.Position--;
+                }
+            }
             refresh();
         }
 

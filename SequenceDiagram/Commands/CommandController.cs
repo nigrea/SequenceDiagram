@@ -31,7 +31,8 @@ namespace SequenceDiagram.Commands
             command.Run();
         }
 
-        public void clearStacks() {
+        public void clearStacks()
+        {
             undoStack.Clear();
             redoStack.Clear();
         }
@@ -45,10 +46,13 @@ namespace SequenceDiagram.Commands
         // Udfører undo hvis det kan lade sig gøre.
         public void Undo()
         {
-            if (undoStack.Count() <= 0) throw new InvalidOperationException();
-            IUndoableCommand command = undoStack.Pop();
-            redoStack.Push(command);
-            command.Undo();
+            if (CanUndo())
+            {
+                if (undoStack.Count() <= 0) throw new InvalidOperationException();
+                IUndoableCommand command = undoStack.Pop();
+                redoStack.Push(command);
+                command.Undo();
+            }
         }
 
         // Sørger for at redo kun kan kaldes når der er kommandoer i redo stacken.
@@ -60,10 +64,13 @@ namespace SequenceDiagram.Commands
         // Udfører redo hvis det kan lade sig gøre.
         public void Redo()
         {
-            if (redoStack.Count() <= 0) throw new InvalidOperationException();
-            IUndoableCommand command = redoStack.Pop();
-            undoStack.Push(command);
-            command.Run();
+            if (CanRedo())
+            {
+                if (redoStack.Count() <= 0) throw new InvalidOperationException();
+                IUndoableCommand command = redoStack.Pop();
+                undoStack.Push(command);
+                command.Run();
+            }
         }
 
     }
