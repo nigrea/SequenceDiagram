@@ -75,7 +75,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\AddBox.cs" />
+    <Compile Include="Commands\MoveBox.cs" />
+    <Compile Include="Commands\MoveComponent.cs" />
+    <Compile Include="Commands\MoveMessage.cs" />
     <Compile Include="Commands\RemoveBox.cs" />
+    <Compile Include="Commands\ResizeBox.cs" />
     <Compile Include="View\Arrow.xaml.cs">
       <DependentUpon>Arrow.xaml</DependentUpon>
     </Compile>

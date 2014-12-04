@@ -25,6 +25,10 @@ namespace SequenceDiagram.ViewModel
         public ComponentGrid ComponentGrid;
         private Point messageStartPoint;
         public bool changeBoxSize, enabledDelete;
+        private MoveComponent moveComponent;
+        private MoveBox moveBox;
+        private MoveMessage moveMessage;
+        private ResizeBox resizeBox;
 
         public ObservableCollection<Component> Components { get; set; }
         public ObservableCollection<Message> Messages { get; set; }
@@ -191,15 +195,19 @@ namespace SequenceDiagram.ViewModel
 
         public void MouseDownComponent(MouseButtonEventArgs e)
         {
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            Component componentModel = (Component)shapeVisualElement.DataContext;
+            Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            Point mousePosition = Mouse.GetPosition(canvas);
+
             if (enabledDelete)
             {
-                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Component componentModel = (Component)shapeVisualElement.DataContext;
                 commandController.AddAndExecute(new RemoveComponent(componentModel, ComponentGrid));
-
             }
             else
             {
+                moveComponent = new MoveComponent(ComponentGrid, componentModel, mousePosition.X);
+
                 e.MouseDevice.Target.CaptureMouse();
             }
         }
@@ -231,7 +239,8 @@ namespace SequenceDiagram.ViewModel
             Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
             Point mousePosition = Mouse.GetPosition(canvas);
 
-            ComponentGrid.setNewPosition(component, mousePosition.X);
+            moveComponent.newCoordinate = mousePosition.X;
+            commandController.AddAndExecute(moveComponent);
 
             //undoRedoController.AddAndExecute(new MoveShapeCommand(component, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));
             component.Y = 0;
@@ -245,15 +254,18 @@ namespace SequenceDiagram.ViewModel
 
         public void MouseDownMessage(MouseButtonEventArgs e)
         {
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            Message message = (Message)shapeVisualElement.DataContext;
+            Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            Point mousePosition = Mouse.GetPosition(canvas);
             if (enabledDelete)
             {
-                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Message message = (Message)shapeVisualElement.DataContext;
                 commandController.AddAndExecute(new RemoveMessage(message, ComponentGrid));
 
             }
             else
             {
+                moveMessage = new MoveMessage(ComponentGrid, message);
                 e.MouseDevice.Target.CaptureMouse();
             }
         }
@@ -285,11 +297,12 @@ namespace SequenceDiagram.ViewModel
             Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
             Point mousePosition = Mouse.GetPosition(canvas);
 
+            moveMessage.newCoordinate = mousePosition.Y;
+            commandController.AddAndExecute(moveMessage);
+
             //ComponentGrid.setNewMessagePosition(component, mousePosition.X);
 
-            //undoRedoController.AddAndExecute(new MoveShapeCommand(component, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));
-
-            moveShapePoint = new Point();
+            //undoRedoController.AddAndExecute(new MoveShapeCommand(component, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));            
 
             e.MouseDevice.Target.ReleaseMouseCapture();
 
@@ -298,15 +311,23 @@ namespace SequenceDiagram.ViewModel
 
         public void MouseDownBox(MouseButtonEventArgs e)
         {
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            Box box = (Box)shapeVisualElement.DataContext;
             if (enabledDelete)
             {
-                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Box box = (Box)shapeVisualElement.DataContext;
                 commandController.AddAndExecute(new RemoveBox(box, ComponentGrid));
 
             }
             else
             {
+                if (!changeBoxSize)
+                {
+                    moveBox = new MoveBox(ComponentGrid, box);
+                }
+                else
+                {
+                    resizeBox = new ResizeBox(ComponentGrid, box);
+                }
                 e.MouseDevice.Target.CaptureMouse();
             }
         }
@@ -361,6 +382,27 @@ namespace SequenceDiagram.ViewModel
 
         public void MouseUpBox(MouseButtonEventArgs e)
         {
+            FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            Box box = (Box)shapeVisualElement.DataContext;
+            Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            Point mousePosition = Mouse.GetPosition(canvas);
+
+
+            if (!changeBoxSize)
+            {
+                moveBox.newX = (int)mousePosition.X;
+                moveBox.newY = (int)mousePosition.Y;
+
+                commandController.AddAndExecute(moveBox);
+            }
+            else
+            {
+                resizeBox.newWidth = (int)mousePosition.X - box.CanvasLeft;
+                resizeBox.newHeight = (int)mousePosition.Y - box.CanvasTop;
+
+                commandController.AddAndExecute(resizeBox);
+            }
+
             e.MouseDevice.Target.ReleaseMouseCapture();
 
         }

@@ -25,6 +25,8 @@ namespace Elements
         private int height;
         public int Height { get { return height; } set { height = value; NotifyPropertyChanged("Height"); NotifyPropertyChanged("CenterY"); NotifyPropertyChanged("CanvasCenterY"); } }
 
+        public int TextWidth { get { return width - 20; } }
+
         public int CanvasCenterX { get { return X + Width / 2; } set { X = value - Width / 2; NotifyPropertyChanged("X"); } }
         public int CanvasCenterY { get { return Y + Height / 2; } set { Y = value - Height / 2; NotifyPropertyChanged("Y"); } }
         public int CenterX { get { return Width / 2; } }
@@ -46,6 +48,10 @@ namespace Elements
 
         }
 
+        public void refresh() {
+            NotifyPropertyChanged("TextWidth");
+            
+        }
 
     }
 }

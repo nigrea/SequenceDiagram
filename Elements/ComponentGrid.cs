@@ -126,6 +126,7 @@ namespace Elements
                 component.X = ScreenWidth / (Components.Count + 1) * component.Position;
                 component.Width = (ScreenWidth / (Components.Count + 1)) - 20;
                 component.Height = 100 + (Messages.Count * 100);
+                component.refresh();
             }
             foreach (Message message in Messages) 
             {

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:View ="clr-namespace:SequenceDiagram.View"
         xmlns:vm="clr-namespace:SequenceDiagram.ViewModel"
-        Title="MainWindow" Height="600" Width="900">
+        Title="MainWindow" Height="900" Width="900">
     
     <Window.DataContext>
         <vm:MainViewModel />
