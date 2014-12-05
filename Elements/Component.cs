@@ -45,7 +45,8 @@ namespace Elements
             messages = new ObservableCollection<Message>();
             Position = ++counter;
             Height = 300;
-
+            
+            
         }
 
         public void refresh() {
