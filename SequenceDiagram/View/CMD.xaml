@@ -35,26 +35,27 @@
         <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding Components}" Height="133" Margin="6,10,0,-42" Grid.Row="2" VerticalAlignment="Top" Width="187" AutoGenerateColumns="False"> 
             <DataGrid.Columns>
 
-                <DataGridTextColumn Binding="{Binding Position}"  Header="Item" Width="*" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Position}"  Header="Position" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*" IsReadOnly="False"/>
 
             </DataGrid.Columns>
         </DataGrid>
 
-        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding Messages}" Height="133" Margin="6,10,0,-42" Grid.Row="3" VerticalAlignment="Top" Width="187" AutoGenerateColumns="True">
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding Messages}" Height="133" Margin="6,10,0,-42" Grid.Row="3" VerticalAlignment="Top" Width="187" AutoGenerateColumns="False">
             <DataGrid.Columns>
 
-                <DataGridTextColumn Binding="{Binding Position}"  Header="Item" Width="*" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
+                <DataGridTextColumn Binding="{Binding Position}"  Header="Position" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*" IsReadOnly="False"/>
+                <DataGridTextColumn Binding="{Binding Start.Name}" Header="From" Width="*" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding End.Name}" Header="To" Width="*" IsReadOnly="True"/>
 
             </DataGrid.Columns>
         </DataGrid>
 
-        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding Boxes}" Height="133" Margin="6,10,0,-42" Grid.Row="4" VerticalAlignment="Top" Width="187" AutoGenerateColumns="True">
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding Boxes}" Height="133" Margin="6,10,0,-42" Grid.Row="4" VerticalAlignment="Top" Width="187" AutoGenerateColumns="False">
             <DataGrid.Columns>
-
-                <DataGridTextColumn Binding="{Binding Position}"  Header="Item" Width="*" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*"/>
+                
+                <DataGridTextColumn Binding="{Binding Name}" Header="Name" Width="*" IsReadOnly="False"/>
 
             </DataGrid.Columns>
         </DataGrid>

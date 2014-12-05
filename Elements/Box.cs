@@ -21,8 +21,8 @@ namespace Elements
         private int canvasTop;
         public int CanvasTop { get { return canvasTop; } set { canvasTop = value; NotifyPropertyChanged("CanvasTop"); } }
 
-        private int name;
-        public int Name { get { return name; } set { name = value; NotifyPropertyChanged("Name"); } }
+        private string name;
+        public string Name { get { return name; } set { name = value; NotifyPropertyChanged("Name"); } }
 
         private double opacity;
         public double Opacity { get { return opacity; } set { opacity = value; NotifyPropertyChanged("Opacity"); } }
