@@ -4,13 +4,13 @@
         xmlns:View ="clr-namespace:SequenceDiagram.View"
         xmlns:vm="clr-namespace:SequenceDiagram.ViewModel"
         Title="MainWindow" Height="900" Width="900">
-    
+
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
     <StackPanel Orientation="Horizontal">
-        <View:CMD/>
-        <DockPanel Width="32">
+        <View:CMD Width="200"/>
+        <DockPanel Width="34">
 
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
@@ -21,7 +21,7 @@
                 </MenuItem>
             </Menu>
 
-            
+
 
             <View:ComponentGridUserControl Height="849" VerticalAlignment="Bottom"/>
 
