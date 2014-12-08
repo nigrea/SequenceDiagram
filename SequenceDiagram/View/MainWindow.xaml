@@ -23,7 +23,7 @@
 
 
 
-            <View:ComponentGridUserControl Height="849" VerticalAlignment="Bottom"/>
+            <View:ComponentGridUserControl/>
 
         </DockPanel>
     </StackPanel>
