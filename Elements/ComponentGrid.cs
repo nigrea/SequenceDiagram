@@ -30,7 +30,6 @@ namespace Elements
 
         public void addBox(Box box) {
             Boxes.Add(box);
-            System.Console.WriteLine("Box added to list " + Boxes.Count);
         }
 
         public void removeBox(Box box)
@@ -174,14 +173,15 @@ namespace Elements
         public void setNewMessagePosition(Message movingMessage, double coordinate)
         {
             int newPosition = getPositionOfMessage(coordinate);
-            System.Console.WriteLine("newPosition "+newPosition);
+            System.Console.WriteLine("newPosition before "+newPosition + " coordinate "+coordinate);
             if (newPosition == 0)
             {
                 newPosition = 1;
             }
-            if (newPosition > Components.Count)
+            if (newPosition > Messages.Count)
             {
-                newPosition = Components.Count;
+                System.Console.WriteLine("Component.Count " + Components.Count);
+                newPosition = Messages.Count;
             }
             if (newPosition < movingMessage.Position)
             {
@@ -203,6 +203,7 @@ namespace Elements
                     }
                 }
             }
+            System.Console.WriteLine("newPosition after " + newPosition);
             movingMessage.Position = newPosition;
             refresh();
 
